@@ -26,7 +26,8 @@ class DiscreteEnvironment(object):
         # This function maps a node configuration in full configuration
         # space to a node in discrete space
         #
-        node_id = 0
+        coord = self.ConfigurationToGridCoord(config)
+        node_id = self.GridCoordToNodeId(coord)
         return node_id
 
     def NodeIdToConfiguration(self, nid):
@@ -35,7 +36,8 @@ class DiscreteEnvironment(object):
         # This function maps a node in discrete space to a configuraiton
         # in the full configuration space
         #
-        config = [0] * self.dimension
+        coord = self.NodeIdToGridCoord(nid)
+        config = self.GridCoordToConfiguration(coord)
         return config
         
     def ConfigurationToGridCoord(self, config):
@@ -44,7 +46,7 @@ class DiscreteEnvironment(object):
         # This function maps a configuration in the full configuration space
         # to a grid coordinate in discrete space
         #
-        coord = [0] * self.dimension
+        coord = numpy.divide(config,self.resolution).astype('int')
         return coord
 
     def GridCoordToConfiguration(self, coord):
@@ -53,7 +55,7 @@ class DiscreteEnvironment(object):
         # This function smaps a grid coordinate in discrete space
         # to a configuration in the full configuration space
         #
-        config = [0] * self.dimension
+        config = [self.resolution/2] * self.dimension + numpy.multiply(coord,self.resolution)
         return config
 
     def GridCoordToNodeId(self,coord):
@@ -61,7 +63,7 @@ class DiscreteEnvironment(object):
         # TODO:
         # This function maps a grid coordinate to the associated
         # node id 
-        node_id = 0
+        node_id = numpy.ravel_multi_index(coord,self.num_cells,order='F')
         return node_id
 
     def NodeIdToGridCoord(self, node_id):
@@ -69,8 +71,7 @@ class DiscreteEnvironment(object):
         # TODO:
         # This function maps a node id to the associated
         # grid coordinate
-        coord = [0] * self.dimension
-        return coord
+        return numpy.array(numpy.unravel_index(node_id,self.num_cells,order='F'))
         
         
         
