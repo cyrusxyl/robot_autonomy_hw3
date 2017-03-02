@@ -1,4 +1,5 @@
 import numpy
+import time
 import pylab as pl
 from DiscreteEnvironment import DiscreteEnvironment
 
@@ -28,7 +29,41 @@ class SimpleEnvironment(object):
         #  up the configuration associated with the particular node_id
         #  and return a list of node_ids that represent the neighboring
         #  nodes
-        
+
+        # For node_id, get 4-connected neighborhood
+        # Check for collision here, return only collision-free successors
+
+        coord = self.discrete_env.NodeIdToGridCoord(node_id)
+
+        neighbors_coords = [coord - numpy.array([0,1]), coord + numpy.array([1,0]), coord + numpy.array([0,1]), coord - numpy.array([1,0]) ]
+        print neighbors_coords
+        orig_T = self.robot.GetTransform()
+        for neighbor in neighbors_coords:
+            print neighbor,
+            if numpy.any(neighbor < 0) or numpy.any(neighbor > (self.discrete_env.num_cells - numpy.array([1,1]))):
+                print "...invalid neighbor"
+                continue
+
+            collision = False
+            with self.robot.GetEnv():
+                T = self.robot.GetTransform()
+                # orig_T = T
+                T[0][3] = self.discrete_env.GridCoordToConfiguration(neighbor)[0]
+                T[1][3] = self.discrete_env.GridCoordToConfiguration(neighbor)[1]
+                self.robot.SetTransform(T)
+                
+
+                collision = self.robot.GetEnv().CheckCollision(self.robot.GetEnv().GetRobots()[0])
+                if not (collision):
+                    
+                    successors.append(self.discrete_env.GridCoordToNodeId(neighbor))
+                    print successors
+                else:
+                    print "collision detected"
+                    
+                self.robot.SetTransform(orig_T)
+                
+        successors.sort()
         return successors
 
     def ComputeDistance(self, start_id, end_id):
@@ -39,6 +74,15 @@ class SimpleEnvironment(object):
         # computes the distance between the configurations given
         # by the two node ids
 
+        ## Distance = Manhattan distance between two coords
+
+        # start_config = self.discrete_env.NodeIdToConfiguration(start_id)
+        # end_config = self.discrete_env.NodeIdToConfiguration(end_id)
+        start_coord = self.discrete_env.NodeIdToGridCoord(start_id)
+        end_coord = self.discrete_env.NodeIdToGridCoord(end_id)
+        
+        dist = sum(abs(start_coord-end_coord))
+
         return dist
 
     def ComputeHeuristicCost(self, start_id, goal_id):
@@ -48,6 +92,12 @@ class SimpleEnvironment(object):
         # TODO: Here you will implement a function that 
         # computes the heuristic cost between the configurations
         # given by the two node ids
+
+        ## Heuristic = Euclidean Distance between two configs
+        start_config = self.discrete_env.NodeIdToConfiguration(start_id)
+        end_config = self.discrete_env.NodeIdToConfiguration(goal_id)
+
+        cost = numpy.linalg.norm(start_config-end_config)
 
         return cost
 
