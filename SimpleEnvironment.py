@@ -35,8 +35,12 @@ class SimpleEnvironment(object):
 
         coord = self.discrete_env.NodeIdToGridCoord(node_id)
 
+        if numpy.any(coord < 0) or numpy.any(coord > (self.discrete_env.num_cells - numpy.array([1,1]))):
+            print "input coord out of bounds"
+            return None
+
         neighbors_coords = [coord - numpy.array([0,1]), coord + numpy.array([1,0]), coord + numpy.array([0,1]), coord - numpy.array([1,0]) ]
-        print neighbors_coords
+        # print neighbors_coords
         orig_T = self.robot.GetTransform()
         for neighbor in neighbors_coords:
             print neighbor,
@@ -57,9 +61,10 @@ class SimpleEnvironment(object):
                 if not (collision):
                     
                     successors.append(self.discrete_env.GridCoordToNodeId(neighbor))
-                    print successors
+                    print "...added to successors"
+                    # print successors
                 else:
-                    print "collision detected"
+                    print "...collision detected"
                     
                 self.robot.SetTransform(orig_T)
                 

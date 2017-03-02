@@ -36,6 +36,9 @@ class DiscreteEnvironment(object):
         # This function maps a node in discrete space to a configuraiton
         # in the full configuration space
         #
+        if nid < 0 or nid > numpy.prod(self.num_cells)-1 :
+            return None
+        
         coord = self.NodeIdToGridCoord(nid)
         config = self.GridCoordToConfiguration(coord)
         return config
@@ -71,6 +74,9 @@ class DiscreteEnvironment(object):
         # TODO:
         # This function maps a node id to the associated
         # grid coordinate
+        if node_id < 0 or node_id > numpy.prod(self.num_cells)-1 :
+            return None
+        
         return numpy.array(numpy.unravel_index(node_id,self.num_cells,order='F'))
         
         
