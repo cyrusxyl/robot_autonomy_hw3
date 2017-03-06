@@ -5,7 +5,7 @@ class DiscreteEnvironment(object):
     def __init__(self, resolution, lower_limits, upper_limits):
 
         # Store the resolution
-        self.resolution = resolution
+        self.resolution = float(resolution)
 
         # Store the bounds
         self.lower_limits = lower_limits
@@ -49,7 +49,12 @@ class DiscreteEnvironment(object):
         # This function maps a configuration in the full configuration space
         # to a grid coordinate in discrete space
         #
-        coord = numpy.divide(config,self.resolution).astype('int')
+        config = numpy.array(config).astype('float')
+        
+        offset = numpy.subtract(config,self.lower_limits)
+        coord = numpy.divide(offset,self.resolution).astype('int')
+
+        coord = numpy.minimum(coord, numpy.subtract(self.num_cells,1))
         return coord
 
     def GridCoordToConfiguration(self, coord):
@@ -58,7 +63,15 @@ class DiscreteEnvironment(object):
         # This function smaps a grid coordinate in discrete space
         # to a configuration in the full configuration space
         #
-        config = [self.resolution/2] * self.dimension + numpy.multiply(coord,self.resolution)
+        coord = numpy.array(coord).astype('float')
+        config = self.lower_limits + numpy.multiply(coord,self.resolution)
+        
+        for dim in range(0, len(coord)):
+            if coord[dim] == self.num_cells[dim]-1:
+                config[dim] += (self.upper_limits[dim]-config[dim])/2
+            else:
+                config[dim] += self.resolution/2
+
         return config
 
     def GridCoordToNodeId(self,coord):
