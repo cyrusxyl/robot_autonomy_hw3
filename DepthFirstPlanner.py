@@ -28,23 +28,16 @@ class DepthFirstPlanner(object):
 	start_node = self.planning_env.discrete_env.ConfigurationToNodeId(start_config)
 	goal_node = self.planning_env.discrete_env.ConfigurationToNodeId(goal_config)
 
-	print start_config, goal_config
-	print start_node,goal_node
-
 	plan.append(start_node)
 	while len(plan) is not 0:
 		node = plan.pop()
-		#print "Node popped: ",node
 		if node == goal_node:
 			for node in plan:
 				plan_config.append(self.planning_env.discrete_env.NodeIdToConfiguration(node))
-			print "Plan: ",plan
-			print "Plan Config: ",plan_config
-			return plan_config
+				return plan_config
 		if node not in visited:
 			visited.append(node)
 			successors = self.planning_env.GetSuccessors(node)
-			#print "Successors: ",successors
 			for neighbor in successors:
 				neighbor_config = self.planning_env.discrete_env.NodeIdToConfiguration(neighbor)
 				node_config = self.planning_env.discrete_env.NodeIdToConfiguration(node)
@@ -52,8 +45,7 @@ class DepthFirstPlanner(object):
 				plan.append(neighbor)
 				
 
-		#print "Plan: ",plan
-		#print "Visited: ",visited
-		#time.sleep(0.5)
+			print plan
+			# time.sleep(0.5)
 
         return None
