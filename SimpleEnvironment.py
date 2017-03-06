@@ -134,19 +134,18 @@ class SimpleEnvironment(object):
         pl.ion()
         pl.show()
         
-    def PlotEdge(self, sconfig, econfig):
+    def PlotEdge(self, sconfig, econfig, render_interval = 1):
         pl.plot([sconfig[0], econfig[0]],
                 [sconfig[1], econfig[1]],
                 'k.-', linewidth=0.5)
         
 
         self.cnt += 1
-        render_interval = 100/self.resolution
+        # render_interval = 100/self.resolution
+        # render_interval = 1
         if self.cnt > render_interval:
             
             pl.draw()
-        
-            # pl.cla()
             self.cnt = 0
 
     def PlotEdgePlan(self, sconfig, econfig, color='r'):

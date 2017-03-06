@@ -42,7 +42,7 @@ class DepthFirstPlanner(object):
 
             last_node_config = self.planning_env.discrete_env.NodeIdToConfiguration(last_node)
             node_config = self.planning_env.discrete_env.NodeIdToConfiguration(node)
-            self.planning_env.PlotEdge(last_node_config,node_config)
+            self.planning_env.PlotEdge(last_node_config,node_config, 100)
 
             #print "Node popped: ",node
             if node == goal_node:
