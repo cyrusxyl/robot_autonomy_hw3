@@ -39,13 +39,13 @@ class SimpleEnvironment(object):
             print "input coord out of bounds"
             return None
 
-        neighbors_coords = [coord - numpy.array([0,1]), coord + numpy.array([1,0]), coord + numpy.array([0,1]), coord - numpy.array([1,0]) ]
+        neighbors_coords = [coord - numpy.array([1,0]), coord - numpy.array([0,1]), coord + numpy.array([0,1]), coord + numpy.array([1,0]) ]
         # print neighbors_coords
         orig_T = self.robot.GetTransform()
         for neighbor in neighbors_coords:
-            print neighbor,
+            # print neighbor,
             if numpy.any(neighbor < 0) or numpy.any(neighbor > (self.discrete_env.num_cells - numpy.array([1,1]))):
-                print "...invalid neighbor"
+                # print "...invalid neighbor"
                 continue
 
             collision = False
@@ -61,14 +61,14 @@ class SimpleEnvironment(object):
                 if not (collision):
                     
                     successors.append(self.discrete_env.GridCoordToNodeId(neighbor))
-                    print "...added to successors"
+                    # print "...added to successors"
                     # print successors
-                else:
-                    print "...collision detected"
+                # else:
+                    # print "...collision detected"
                     
                 self.robot.SetTransform(orig_T)
                 
-        successors.sort()
+        # successors.sort()
         return successors
 
     def ComputeDistance(self, start_id, end_id):
@@ -108,6 +108,7 @@ class SimpleEnvironment(object):
 
     def InitializePlot(self, goal_config):
         self.fig = pl.figure()
+        self.cnt = 0
         pl.xlim([self.lower_limits[0], self.upper_limits[0]])
         pl.ylim([self.lower_limits[1], self.upper_limits[1]])
         pl.plot(goal_config[0], goal_config[1], 'gx')
@@ -135,7 +136,13 @@ class SimpleEnvironment(object):
     def PlotEdge(self, sconfig, econfig):
         pl.plot([sconfig[0], econfig[0]],
                 [sconfig[1], econfig[1]],
-                'k.-', linewidth=2.5)
-        pl.draw()
+                'k.-', linewidth=1.5)
+        self.cnt += 1
+        if self.cnt > 500:
+            
+            pl.draw()
+        
+            # pl.cla()
+            self.cnt = 0
 
         
