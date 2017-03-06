@@ -7,6 +7,7 @@ class SimpleEnvironment(object):
     
     def __init__(self, herb, resolution):
         self.robot = herb.robot
+        self.resolution = resolution
         self.lower_limits = [-5., -5.]
         self.upper_limits = [5., 5.]
         self.discrete_env = DiscreteEnvironment(resolution, self.lower_limits, self.upper_limits)
@@ -136,13 +137,29 @@ class SimpleEnvironment(object):
     def PlotEdge(self, sconfig, econfig):
         pl.plot([sconfig[0], econfig[0]],
                 [sconfig[1], econfig[1]],
-                'k.-', linewidth=1.5)
+                'k.-', linewidth=0.5)
+        
+
         self.cnt += 1
-        if self.cnt > 500:
+        render_interval = 100/self.resolution
+        if self.cnt > render_interval:
             
             pl.draw()
         
             # pl.cla()
             self.cnt = 0
 
+    def PlotEdgePlan(self, sconfig, econfig, color='r'):
+
+        pl.plot([sconfig[0], econfig[0]],
+                [sconfig[1], econfig[1]],
+                color+'.-', linewidth=1.0)
+        # pl.draw()
+
+
+    def ShowPlan(self, plan, color='r'):
+
+        for i in range(len(plan)-1):
+            self.PlotEdgePlan(plan[i],plan[i+1], color)
+        pl.draw()
         
