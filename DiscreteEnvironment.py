@@ -49,12 +49,13 @@ class DiscreteEnvironment(object):
         # This function maps a configuration in the full configuration space
         # to a grid coordinate in discrete space
         #
-        config = numpy.array(config).astype('float')
+        config = numpy.array(config).astype(float)
         
         offset = numpy.subtract(config,self.lower_limits)
-        coord = numpy.divide(offset,self.resolution).astype('int')
+        coord = numpy.divide(offset,self.resolution)
 
         coord = numpy.minimum(coord, numpy.subtract(self.num_cells,1))
+        coord = coord.astype(int)
         return coord
 
     def GridCoordToConfiguration(self, coord):
@@ -63,7 +64,7 @@ class DiscreteEnvironment(object):
         # This function smaps a grid coordinate in discrete space
         # to a configuration in the full configuration space
         #
-        coord = numpy.array(coord).astype('float')
+        coord = numpy.array(coord).astype(float)
         config = self.lower_limits + numpy.multiply(coord,self.resolution)
         
         for dim in range(0, len(coord)):
