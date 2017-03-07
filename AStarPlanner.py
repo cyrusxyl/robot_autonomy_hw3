@@ -9,6 +9,8 @@ class AStarPlanner(object):
         self.visualize = visualize
         self.nodes = dict()
         self.costs = dict()
+        self.dist_so_far = dict()
+
 
     def Plan(self, start_config, goal_config):
 
@@ -26,13 +28,14 @@ class AStarPlanner(object):
 
         self.nodes[start_node] = start_node
         self.costs[start_node] = self.planning_env.ComputeHeuristicCost(start_node, goal_node)
+        self.dist_so_far[start_node] = 0
         
 
         print start_config, goal_config
         print start_node,goal_node
 
         q.append(start_node)
-
+        visited.append(start_node)
         while len(q) is not 0:
             #print "Queue:", q
             #print "Visited: ", visited
@@ -43,11 +46,11 @@ class AStarPlanner(object):
             # print [self.costs[i] for i in q]
             # node = q.popleft()
             node = q.pop(0)
-            visited.append(node)
+            # visited.append(node)
 
             last_node_config = self.planning_env.discrete_env.NodeIdToConfiguration(self.nodes[node])
             node_config = self.planning_env.discrete_env.NodeIdToConfiguration(node)
-            self.planning_env.PlotEdge(last_node_config,node_config)
+            self.planning_env.PlotEdge(last_node_config,node_config, 10/self.planning_env.resolution)
 
             #print "Node popped: ",node
             if node == goal_node:
@@ -73,12 +76,15 @@ class AStarPlanner(object):
             successors = self.planning_env.GetSuccessors(node)
             #print "Successors: ",successors
             for neighbor in successors:
-                if neighbor not in visited:
+                new_dist = self.dist_so_far[node] + self.planning_env.ComputeDistance(node, neighbor)
+                # print "new_dist:", new_dist, " dist_so_far: ", self.dist_so_far[node]
+                if neighbor not in visited or new_dist < self.dist_so_far[neighbor]:
+                    self.dist_so_far[neighbor] = new_dist
                     q.append(neighbor)
                     visited.append(neighbor)
 
                     ##assign cost = distance + heuristic
-                    self.costs[neighbor] = self.planning_env.ComputeDistance(node, neighbor) + self.planning_env.ComputeHeuristicCost(neighbor,goal_node)
+                    self.costs[neighbor] = self.dist_so_far[neighbor] + self.planning_env.ComputeHeuristicCost(neighbor,goal_node)
                     self.nodes[neighbor] = node
 
             #print "Plan: ",plan

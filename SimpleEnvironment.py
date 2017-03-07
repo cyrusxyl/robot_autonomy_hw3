@@ -82,12 +82,13 @@ class SimpleEnvironment(object):
 
         ## Distance = Manhattan distance between two coords
 
-        # start_config = self.discrete_env.NodeIdToConfiguration(start_id)
-        # end_config = self.discrete_env.NodeIdToConfiguration(end_id)
-        start_coord = self.discrete_env.NodeIdToGridCoord(start_id)
-        end_coord = self.discrete_env.NodeIdToGridCoord(end_id)
+        start_config = self.discrete_env.NodeIdToConfiguration(start_id)
+        end_config = self.discrete_env.NodeIdToConfiguration(end_id)
+        # start_coord = self.discrete_env.NodeIdToGridCoord(start_id)
+        # end_coord = self.discrete_env.NodeIdToGridCoord(end_id)
         
-        dist = sum(abs(start_coord-end_coord))
+        # dist = sum(abs(start_config-end_config))
+        dist = numpy.linalg.norm(start_config-end_config,1)
 
         return dist
 
