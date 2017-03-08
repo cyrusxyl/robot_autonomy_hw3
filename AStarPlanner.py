@@ -44,13 +44,14 @@ class AStarPlanner(object):
             # print [self.costs[i] for i in q] 
             q = sorted(q, key=self.costs.__getitem__, reverse=False)	#sort q based on costs
             # print [self.costs[i] for i in q]
+            print self.costs[q[0]]
             # node = q.popleft()
             node = q.pop(0)
             # visited.append(node)
 
             last_node_config = self.planning_env.discrete_env.NodeIdToConfiguration(self.nodes[node])
             node_config = self.planning_env.discrete_env.NodeIdToConfiguration(node)
-            self.planning_env.PlotEdge(last_node_config,node_config, 10/self.planning_env.resolution)
+            # self.planning_env.PlotEdge(last_node_config,node_config, 10/self.planning_env.resolution)
 
             #print "Node popped: ",node
             if node == goal_node:
@@ -66,7 +67,7 @@ class AStarPlanner(object):
                 
                 print "Plan Length: ", len(plan)
 
-                self.planning_env.ShowPlan(plan)
+                # self.planning_env.ShowPlan(plan)
 
                 plan = numpy.asarray(plan).reshape(len(plan),-1)
                 
