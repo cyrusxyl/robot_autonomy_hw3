@@ -63,11 +63,7 @@ class HerbEnvironment(object):
         # print neighbors
 
         for ncoord in neighbors:
-            # print ncoord
-	    upper_limit_coord = self.discrete_env.ConfigurationToGridCoord(self.upper_limits)
-	    lower_limit_coord = self.discrete_env.ConfigurationToGridCoord(self.lower_limits)
-
-            if (numpy.any(ncoord < 0) or numpy.any(ncoord > (self.discrete_env.num_cells)) or numpy.any(ncoord > upper_limit_coord) or 		    numpy.any(ncoord < lower_limit_coord)):
+            if numpy.any(ncoord < 0) or numpy.any(ncoord >= (self.discrete_env.num_cells)):
                 print "...invalid neighbor"
                 continue
             
