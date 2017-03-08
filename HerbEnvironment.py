@@ -64,8 +64,10 @@ class HerbEnvironment(object):
 
         for ncoord in neighbors:
             # print ncoord
+	    upper_limit_coord = self.discrete_env.ConfigurationToGridCoord(self.upper_limits)
+	    lower_limit_coord = self.discrete_env.ConfigurationToGridCoord(self.lower_limits)
 
-            if numpy.any(ncoord < 0) or numpy.any(ncoord > (self.discrete_env.num_cells )):
+            if (numpy.any(ncoord < 0) or numpy.any(ncoord > (self.discrete_env.num_cells)) or numpy.any(ncoord > upper_limit_coord) or 		    numpy.any(ncoord < lower_limit_coord)):
                 print "...invalid neighbor"
                 continue
             
@@ -77,6 +79,7 @@ class HerbEnvironment(object):
                 # self.robot.SetActiveDOFValues(orig_config)
             
             if not collision:
+		#print ncoord,self.discrete_env.GridCoordToNodeId(ncoord)
                 successors.append(self.discrete_env.GridCoordToNodeId(ncoord))
                 # print successors
             else:
