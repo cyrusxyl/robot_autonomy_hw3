@@ -26,23 +26,23 @@ class DepthFirstPlanner(object):
 
         start_node = self.planning_env.discrete_env.ConfigurationToNodeId(start_config)
         goal_node = self.planning_env.discrete_env.ConfigurationToNodeId(goal_config)
+	self.nodes[start_node] = start_node
 
         print start_config, goal_config
         print start_node,goal_node
 
         q.append(start_node)
-        last_node = start_node  
+
         while len(q) is not 0:
             # print "Queue:", q
             # print "Visited: ", visited
             node = q.pop()
             visited.append(node)
 
-            self.nodes[node] = last_node
-
-            last_node_config = self.planning_env.discrete_env.NodeIdToConfiguration(last_node)
+            last_node_config = self.planning_env.discrete_env.NodeIdToConfiguration(self.nodes[node])
             node_config = self.planning_env.discrete_env.NodeIdToConfiguration(node)
-            self.planning_env.PlotEdge(last_node_config,node_config, 100)
+	    if self.visualize:
+                self.planning_env.PlotEdge(last_node_config,node_config, 100)
 
             #print "Node popped: ",node
             if node == goal_node:
@@ -54,10 +54,10 @@ class DepthFirstPlanner(object):
                     curr_node = self.nodes[curr_node]
 
                 plan.insert(0,start_config)
-
                 print "Plan Length: ", len(plan)
 
-                self.planning_env.ShowPlan(plan)
+		if self.visualize:
+                    self.planning_env.ShowPlan(plan)
 
                 plan = numpy.asarray(plan).reshape(len(plan),-1)
                 
@@ -71,7 +71,7 @@ class DepthFirstPlanner(object):
                 if neighbor not in visited:
                     q.append(neighbor)
                     visited.append(neighbor)
-
+	   	    self.nodes[neighbor] = node
             last_node = node
 
             #print "Plan: ",plan

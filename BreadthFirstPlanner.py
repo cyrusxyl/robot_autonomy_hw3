@@ -20,8 +20,8 @@ class BreadthFirstPlanner(object):
         plan = []
 
         start_node = self.planning_env.discrete_env.ConfigurationToNodeId(start_config)
-        self.nodes[start_node] = start_node
         goal_node = self.planning_env.discrete_env.ConfigurationToNodeId(goal_config)
+        self.nodes[start_node] = start_node
 
         print start_config, goal_config
         print start_node,goal_node
@@ -36,7 +36,8 @@ class BreadthFirstPlanner(object):
 
             last_node_config = self.planning_env.discrete_env.NodeIdToConfiguration(self.nodes[node])
             node_config = self.planning_env.discrete_env.NodeIdToConfiguration(node)
-            self.planning_env.PlotEdge(last_node_config,node_config, 1000)
+	    if self.visualize:
+                self.planning_env.PlotEdge(last_node_config,node_config, 1000)
 
             #print "Node popped: ",node
             if node == goal_node:
@@ -48,11 +49,10 @@ class BreadthFirstPlanner(object):
                     #print "Current Node: ", curr_node
                     curr_node = self.nodes[curr_node]
 
-                plan.insert(0,start_config)
-                
+                plan.insert(0,start_config)             
                 print "Plan Length: ", len(plan)
-
-                self.planning_env.ShowPlan(plan)
+		if self.visualize:
+                    self.planning_env.ShowPlan(plan)
 
                 plan = numpy.asarray(plan).reshape(len(plan),-1)
                 
