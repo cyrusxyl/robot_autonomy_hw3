@@ -70,7 +70,7 @@ class AStarPlanner(object):
 
                 plan.insert(0,start_config)
                 
-                print "Plan Length: ", len(plan)
+                print "Plan Length: ", len(plan)*self.planning_env.resolution
 		print "Nodes Expanded: ", len(expanded)
 	        
 	 	if self.visualize:

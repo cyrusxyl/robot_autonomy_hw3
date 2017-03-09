@@ -54,7 +54,7 @@ class DepthFirstPlanner(object):
                     curr_node = self.nodes[curr_node]
 
                 plan.insert(0,start_config)
-                print "Plan Length: ", len(plan)
+                print "Plan Length: ", len(plan)*self.planning_env.resolution
 		print "Nodes Expanded: ", len(expanded)
 
 		if self.visualize:
