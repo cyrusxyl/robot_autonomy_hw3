@@ -16,9 +16,14 @@ class DiscreteEnvironment(object):
 
         # Figure out the number of grid cells that are in each dimension
         self.num_cells = self.dimension*[0]
+
         for idx in range(self.dimension):
             self.num_cells[idx] = numpy.ceil((upper_limits[idx] - lower_limits[idx])/resolution)
 
+        self.dim_size = tuple(self.num_cells)
+
+        if self.dimension == 7:
+            self.page = numpy.prod(self.dim_size[0:-1])
 
     def ConfigurationToNodeId(self, config):
         
@@ -80,8 +85,11 @@ class DiscreteEnvironment(object):
         # TODO:
         # This function maps a grid coordinate to the associated
         # node id 
-        node_id = numpy.ravel_multi_index(coord,self.num_cells,order='F')
-        return node_id
+        if self.dimension == 7:
+        	node_id = coord[-1]*self.page+numpy.ravel_multi_index(coord[0:-1], dims = self.dim_size[0:-1], order='F')
+        else:
+        	node_id = numpy.ravel_multi_index(coord, dims = self.dim_size, order='F')
+        return int(node_id)
 
     def NodeIdToGridCoord(self, node_id):
         
@@ -91,7 +99,7 @@ class DiscreteEnvironment(object):
         if node_id < 0 or node_id > numpy.prod(self.num_cells)-1 :
             return None
         
-        return numpy.array(numpy.unravel_index(node_id,self.num_cells,order='F'))
+        return numpy.array(numpy.unravel_index(node_id, dims = self.dim_size, order='F'))
         
         
         
