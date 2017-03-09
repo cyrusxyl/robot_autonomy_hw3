@@ -85,10 +85,7 @@ class DiscreteEnvironment(object):
         # TODO:
         # This function maps a grid coordinate to the associated
         # node id 
-        if self.dimension == 7:
-        	node_id = coord[-1]*self.page+numpy.ravel_multi_index(coord[0:-1], dims = self.dim_size[0:-1], order='F')
-        else:
-        	node_id = numpy.ravel_multi_index(coord, dims = self.dim_size, order='F')
+        node_id = self.my_ravel(coord)
         return int(node_id)
 
     def NodeIdToGridCoord(self, node_id):
@@ -101,5 +98,10 @@ class DiscreteEnvironment(object):
         
         return numpy.array(numpy.unravel_index(node_id, dims = self.dim_size, order='F'))
         
-        
+    def my_ravel(self, coord):
+    	if len(coord)==1:
+    		return int(coord[0])
+	else:
+		page = numpy.prod(self.dim_size[0:len(coord)-1])
+		return int(coord[-1]*page+ self.my_ravel(coord[0:-1]))
         
