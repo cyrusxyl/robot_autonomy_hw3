@@ -44,7 +44,7 @@ class AStarPlanner(object):
             # print [self.costs[i] for i in q] 
             q = sorted(q, key=self.costs.__getitem__, reverse=False)	#sort q based on costs
             # print [self.costs[i] for i in q]
-            print self.costs[q[0]]
+            # print self.costs[q[0]]
             # node = q.popleft()
             node = q.pop(0)
             # visited.append(node)
@@ -85,7 +85,7 @@ class AStarPlanner(object):
                     visited.append(neighbor)
 
                     ##assign cost = distance + heuristic
-                    self.costs[neighbor] = self.dist_so_far[neighbor] + self.planning_env.ComputeHeuristicCost(neighbor,goal_node)
+                    self.costs[neighbor] = self.dist_so_far[neighbor] + 2*self.planning_env.ComputeHeuristicCost(neighbor,goal_node)
                     self.nodes[neighbor] = node
 
             #print "Plan: ",plan

@@ -69,18 +69,18 @@ class HerbEnvironment(object):
             
             config = self.discrete_env.GridCoordToConfiguration(ncoord)
             
-            # with self.robot.GetEnv():
-            self.robot.SetActiveDOFValues(config)
-            collision = (self.robot.CheckSelfCollision() or self.robot.GetEnv().CheckCollision(bodies[1],bodies[0]))
-                # self.robot.SetActiveDOFValues(orig_config)
-            
-            if not collision:
-		#print ncoord,self.discrete_env.GridCoordToNodeId(ncoord)
-                successors.append(self.discrete_env.GridCoordToNodeId(ncoord))
-                # print successors
-            else:
-                print "collision"
-                self.robot.SetActiveDOFValues(orig_config)
+            with self.robot.GetEnv():
+                self.robot.SetActiveDOFValues(config)
+                collision = (self.robot.CheckSelfCollision() or self.robot.GetEnv().CheckCollision(bodies[1],bodies[0]))
+                    # self.robot.SetActiveDOFValues(orig_config)
+                
+                if not collision:
+    		#print ncoord,self.discrete_env.GridCoordToNodeId(ncoord)
+                    successors.append(self.discrete_env.GridCoordToNodeId(ncoord))
+                    # print successors
+                else:
+                    print "collision"
+                    self.robot.SetActiveDOFValues(orig_config)
 
         return successors
 
