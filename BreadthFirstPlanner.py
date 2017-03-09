@@ -16,6 +16,7 @@ class BreadthFirstPlanner(object):
 
         q = deque([])
         visited = []
+	expanded = []
 
         plan = []
 
@@ -51,14 +52,15 @@ class BreadthFirstPlanner(object):
 
                 plan.insert(0,start_config)             
                 print "Plan Length: ", len(plan)
+		print "Nodes Expanded: ", len(expanded)
 		if self.visualize:
                     self.planning_env.ShowPlan(plan)
 
                 plan = numpy.asarray(plan).reshape(len(plan),-1)
                 
-                print plan.shape
+                #print plan.shape
                 return plan
-                
+	                
             successors = self.planning_env.GetSuccessors(node)
             #print "Successors: ",successors
             for neighbor in successors:
@@ -66,7 +68,7 @@ class BreadthFirstPlanner(object):
                     q.append(neighbor)
                     visited.append(neighbor)
                     self.nodes[neighbor] = node
-
+	    expanded.append(node)
             #print "Plan: ",plan
             #print "Visited: ",visited
             #time.sleep(0.5)

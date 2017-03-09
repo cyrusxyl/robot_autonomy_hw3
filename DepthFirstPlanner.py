@@ -21,8 +21,8 @@ class DepthFirstPlanner(object):
 
         q = []
         visited = []
-
         plan = []
+	expanded = []
 
         start_node = self.planning_env.discrete_env.ConfigurationToNodeId(start_config)
         goal_node = self.planning_env.discrete_env.ConfigurationToNodeId(goal_config)
@@ -55,6 +55,7 @@ class DepthFirstPlanner(object):
 
                 plan.insert(0,start_config)
                 print "Plan Length: ", len(plan)
+		print "Nodes Expanded: ", len(expanded)
 
 		if self.visualize:
                     self.planning_env.ShowPlan(plan)
@@ -72,7 +73,7 @@ class DepthFirstPlanner(object):
                     q.append(neighbor)
                     visited.append(neighbor)
 	   	    self.nodes[neighbor] = node
-            last_node = node
+	    expanded.append(node)
 
             #print "Plan: ",plan
             #print "Visited: ",visited

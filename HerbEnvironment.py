@@ -64,7 +64,7 @@ class HerbEnvironment(object):
 
         for ncoord in neighbors:
             if numpy.any(ncoord < 0) or numpy.any(ncoord >= (self.discrete_env.num_cells)):
-                print "...invalid neighbor"
+                #print "...invalid neighbor"
                 continue
             
             config = self.discrete_env.GridCoordToConfiguration(ncoord)
@@ -79,7 +79,7 @@ class HerbEnvironment(object):
                     successors.append(self.discrete_env.GridCoordToNodeId(ncoord))
                     # print successors
                 else:
-                    print "collision"
+                    #print "collision"
                     self.robot.SetActiveDOFValues(orig_config)
 
         return successors

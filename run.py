@@ -21,9 +21,13 @@ def main(robot, planning_env, planner):
         goal_config = numpy.array([ 4.6, -1.76, 0.00, 1.96, -1.15, 0.87, -1.43] )
     else:
         goal_config = numpy.array([3.0, 0.0])
-
+	
+    start = time.time()
     plan = planner.Plan(start_config, goal_config)
+    end = time.time()
     traj = robot.ConvertPlanToTrajectory(plan)
+
+    print "Elapsed Planning Time: ", (end-start),"seconds"
 
     raw_input('Press any key to execute trajectory')
     robot.ExecuteTrajectory(traj)
@@ -54,7 +58,7 @@ if __name__ == "__main__":
 
     env = openravepy.Environment()
     env.SetViewer('qtcoin')
-    env.GetViewer().SetName('Homework 2 Viewer')
+    env.GetViewer().SetName('Homework 3 Viewer')
 
     # First setup the environment and the robot
     visualize = args.visualize
