@@ -8,6 +8,7 @@ class HerbEnvironment(object):
         self.robot = herb.robot
         self.lower_limits, self.upper_limits = self.robot.GetActiveDOFLimits()
         self.discrete_env = DiscreteEnvironment(resolution, self.lower_limits, self.upper_limits)
+	self.resolution = resolution
 
         # account for the fact that snapping to the middle of the grid cell may put us over our
         #  upper limit
