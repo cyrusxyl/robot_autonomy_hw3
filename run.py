@@ -27,8 +27,14 @@ def main(robot, planning_env, planner):
     end = time.time()
     traj = robot.ConvertPlanToTrajectory(plan)
 
-    print "Elapsed Planning Time: ", (end-start),"seconds"
+    
+    plan_short = planning_env.ShortenPath(plan)
+    traj = robot.ConvertPlanToTrajectory(plan_short)
+    robot.ExecuteTrajectory(traj)
 
+
+    print "Elapsed Planning Time: ", (end-start),"seconds"
+    
     raw_input('Press any key to execute trajectory')
     robot.ExecuteTrajectory(traj)
 
