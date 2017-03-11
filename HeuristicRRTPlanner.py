@@ -37,7 +37,7 @@ class HeuristicRRTPlanner(object):
                 curr_cost = self.planning_env.ComputePathLength(curr_path)
                 curr_h = self.planning_env.ComputeHeuristicC(near_point,goal_config)
                 
-                C_q = curr_cost + curr_h
+                C_q = curr_cost + 5*curr_h
                 C_max =  max(C_q, C_max)
                 C_opt = self.planning_env.ComputeDistanceC(start_config, goal_config)
                 # print C_max, C_opt

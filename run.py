@@ -28,9 +28,9 @@ def main(robot, planning_env, planner):
     traj = robot.ConvertPlanToTrajectory(plan)
 
     
-    plan_short = planning_env.ShortenPath(plan)
-    traj = robot.ConvertPlanToTrajectory(plan_short)
-    robot.ExecuteTrajectory(traj)
+    # plan_short = planning_env.ShortenPath(plan)
+    # traj = robot.ConvertPlanToTrajectory(plan_short)
+    # robot.ExecuteTrajectory(traj)
 
 
     print "Elapsed Planning Time: ", (end-start),"seconds"

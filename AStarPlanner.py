@@ -18,7 +18,7 @@ class AStarPlanner(object):
 	if (robotNameComp == True):
 	    hGain = 1
 	else:
-	    hGain = 2
+	    hGain = 3
 	#print hGain	
 
         if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
@@ -41,10 +41,14 @@ class AStarPlanner(object):
 
         print start_config, goal_config
         print start_node,goal_node
-
+        print "Trying to get to: ", self.planning_env.discrete_env.NodeIdToConfiguration(goal_node)
+        print "Lower Limits: ", self.planning_env.lower_limits
+        print "Upper Limits  ", self.planning_env.upper_limits
         q.append(start_node)
         visited.append(start_node)
         while len(q) is not 0:
+
+
             #print "Queue:", q
             #print "Visited: ", visited
 
@@ -52,6 +56,13 @@ class AStarPlanner(object):
             # print [self.costs[i] for i in q] 
             q = sorted(q, key=self.costs.__getitem__, reverse=False)	#sort q based on costs
             node = q.pop(0)
+
+
+            # print "Curr Node:", node, " Goal Node", goal_node
+            # print "Nodes away: ", abs(goal_node - node)
+            # print "Heuristic :", hGain*self.planning_env.ComputeHeuristicCost(node,goal_node)
+            # print "Path Cost: ", self.dist_so_far[node]
+
 
             last_node_config = self.planning_env.discrete_env.NodeIdToConfiguration(self.nodes[node])
             node_config = self.planning_env.discrete_env.NodeIdToConfiguration(node)
